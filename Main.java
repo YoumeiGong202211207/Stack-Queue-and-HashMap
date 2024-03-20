@@ -1,11 +1,10 @@
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
+
     public static void main(String[] args) {
-    
-        
+
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Welcome to Event Organization System!");
@@ -24,40 +23,38 @@ public class Main {
 
         Event event = new Event(eventID, eventName, eventVenue, eventDate);
 
-
         char choice;
         do {
             System.out.println("\nSelect an operation:");
-            System.out.println("1. Add attendee");
-            System.out.println("2. Remove attendee");
-            System.out.println("3. Update attendee");
-            System.out.println("4. Find attendee");
-            System.out.println("5. Display total attendees");
-            System.out.println("6. Display event details");
-            System.out.println("7. Exit");
+            System.out.println("0. Add attendee");
+            System.out.println("1. Remove attendee");
+            System.out.println("2. Update attendee");
+            System.out.println("3. Find attendee");
+            System.out.println("4. Display total attendees");
+            System.out.println("5. Display event details");
+            System.out.println("6. Handle complementary passes");
+            System.out.println("7. Handle performances");
+            System.out.println("8. Get seat details");
+            System.out.println("9. Exit");
             System.out.print("Enter your choice: ");
             choice = scanner.next().charAt(0);
             scanner.nextLine(); // Consume newline
 
             switch (choice) {
-                case '1':
-                    // Prompt the user to enter attendee details
-        System.out.println("Enter Attendee Names (separated by commas): ");
-        String attendeeNames = scanner.nextLine();
-
-        // Split the comma-separated names and add them as attendees
-        String[] names = attendeeNames.split(",");
-        for (String name : names) {
-            event.addAttendee(name.trim());
-        }
-
+                case '0':
+                    System.out.println("Enter Attendee Names (separated by commas): ");
+                    String attendeeNames = scanner.nextLine();
+                    String[] names = attendeeNames.split(",");
+                    for (String name : names) {
+                        event.addAttendee(name, ""); // Assuming seat number is not provided for now
+                    }
                     break;
-                case '2':
+                case '1':
                     System.out.print("Enter attendee name to remove: ");
                     String attendeeToRemove = scanner.nextLine();
-                    event.removeAttendee(attendeeToRemove);
+                    event.removeAttendee(attendeeToRemove, ""); // Assuming seat number is not provided for now
                     break;
-                case '3':
+                case '2':
                     System.out.print("Enter index of attendee to update: ");
                     int indexToUpdate = scanner.nextInt();
                     scanner.nextLine(); // Consume newline
@@ -65,31 +62,77 @@ public class Main {
                     String newName = scanner.nextLine();
                     event.updateAttendee(indexToUpdate, newName);
                     break;
-                case '4':
+                case '3':
                     System.out.print("Enter index of attendee to find: ");
                     int indexToFind = scanner.nextInt();
                     scanner.nextLine(); // Consume newline
                     String foundAttendee = event.findAttendee(indexToFind);
                     System.out.println(foundAttendee);
                     break;
-                case '5':
+                case '4':
                     int totalAttendees = event.getTotalAttendees();
                     System.out.println("Total attendees: " + totalAttendees);
                     break;
-                case '6':
+                case '5':
                     System.out.println(event);
                     break;
+                case '6':
+                    handleComplementaryPasses();
+                    break;
                 case '7':
+                    handlePerformances();
+                    break;
+                case '8':
+                    getSeatDetails(event);
+                    break;
+                case '9':
                     System.out.println("Exiting...");
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");
             }
-        } while (choice != '7');
+        } while (choice != '9');
 
         scanner.close();
     }
-    
+
+    private static void handleComplementaryPasses() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Welcome to Event Organization System!");
+
+        HandlePerformances handlePerformances = new HandlePerformances();
+
+        char choice;
+        do {
+            System.out.println("\nSelect an operation:");
+            System.out.println("1. Handle performances");
+            System.out.println("2. Exit");
+            System.out.print("Enter your choice: ");
+            choice = scanner.nextLine().charAt(0);
+
+            switch (choice) {
+                case '1':
+                    handlePerformances.handlePerformances();
+                    break;
+                case '2':
+                    System.out.println("Exiting...");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        } while (choice != '2');
+
+    }
+
+    private static void handlePerformances() {
+        System.out.println("Handling performances...");
+    }
+
+    private static void getSeatDetails(Event event) {
+        System.out.println("Getting seat details...");
+    }
 }
+
 
 
