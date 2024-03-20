@@ -1,5 +1,6 @@
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Event {
     private String eventID;
@@ -7,8 +8,8 @@ public class Event {
     private String eventVenue;
     private LocalDate eventDate;
     private ArrayList<String> eventAttendees;
-    
-
+    private final int capacity = 200;
+    private HashMap<String, Attendee> seatDetails;
 
     public Event(String eventID, String eventName, String eventVenue, LocalDate eventDate) {
         this.eventID = eventID;
@@ -16,21 +17,27 @@ public class Event {
         this.eventVenue = eventVenue;
         this.eventDate = eventDate;
         this.eventAttendees = new ArrayList<>();
-    } 
-
-    public void addAttendee(String attendee) {
-    
-        eventAttendees.add(attendee);
-        
+        this.seatDetails = new HashMap<>(capacity, 0.6f);
     }
 
-    public void removeAttendee(String attendee) {
+    public void addAttendee(String attendee, String seatNumber) {
+        eventAttendees.add(attendee);
+        seatDetails.put(seatNumber, new Attendee(attendee, seatNumber));
+    }
+
+    public void removeAttendee(String attendee, String seatNumber) {
         eventAttendees.remove(attendee);
+        seatDetails.remove(seatNumber);
     }
 
     public void updateAttendee(int index, String newName) {
         if (index >= 0 && index < eventAttendees.size()) {
+            String attendee = eventAttendees.get(index);
             eventAttendees.set(index, newName);
+            Attendee attendeeDetails = seatDetails.get(attendee);
+            attendeeDetails.setName(newName);
+            seatDetails.remove(attendee);
+            seatDetails.put(attendeeDetails.getSeatNo(), attendeeDetails);
         } else {
             System.out.println("Invalid index.");
         }
@@ -38,7 +45,9 @@ public class Event {
 
     public String findAttendee(int index) {
         if (index >= 0 && index < eventAttendees.size()) {
-            return eventAttendees.get(index);
+            String attendee = eventAttendees.get(index);
+            Attendee attendeeDetails = seatDetails.get(attendee);
+            return attendeeDetails.toString();
         } else {
             return "Attendee not found.";
         }
@@ -46,6 +55,14 @@ public class Event {
 
     public int getTotalAttendees() {
         return eventAttendees.size();
+    }
+
+    public void setSeatDetails(String seatNumber, Attendee attendee) {
+        seatDetails.put(seatNumber, attendee);
+    }
+
+    public Attendee getSeatDetails(String seatNumber) {
+        return seatDetails.get(seatNumber);
     }
 
     public String toString() {
@@ -56,12 +73,12 @@ public class Event {
         sb.append("Event Date: ").append(eventDate).append("\n");
         sb.append("Attendees:\n");
         for (String attendee : eventAttendees) {
-            sb.append(attendee).append("\n");
+            Attendee attendeeDetails = seatDetails.get(attendee);
+            sb.append(attendeeDetails.toString()).append("\n");
         }
         return sb.toString();
     }
 
-    // Getters and setters
     public String getEventID() {
         return eventID;
     }
@@ -101,5 +118,14 @@ public class Event {
     public void setEventAttendees(ArrayList<String> eventAttendees) {
         this.eventAttendees = eventAttendees;
     }
+
+    public HashMap<String, Attendee> getSeatDetails() {
+        return seatDetails;
+    }
+
+    public void setSeatDetails(HashMap<String, Attendee> seatDetails) {
+        this.seatDetails = seatDetails;
+    }
 }
+
 
