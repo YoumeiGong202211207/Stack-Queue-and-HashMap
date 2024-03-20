@@ -93,10 +93,38 @@ public class Main {
             }
         } while (choice != '9');
 
-        scanner.close();
     }
 
     private static void handleComplementaryPasses() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Welcome to Complementary Passes System!");
+
+        HandleComplementaryPasses handleComplementaryPasses = new HandleComplementaryPasses();
+
+        char choice;
+        do {
+            System.out.println("\nSelect an operation:");
+            System.out.println("1. Handle complementary passes");
+            System.out.println("2. Exit");
+            System.out.print("Enter your choice: ");
+            choice = scanner.nextLine().charAt(0);
+
+            switch (choice) {
+                case '1':
+                    handleComplementaryPasses.handleComplementaryPasses();
+                    break;
+                case '2':
+                    System.out.println("Exiting...");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        } while (choice != '2');
+
+    }
+
+    private static void handlePerformances() {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Welcome to Event Organization System!");
@@ -125,14 +153,26 @@ public class Main {
 
     }
 
-    private static void handlePerformances() {
-        System.out.println("Handling performances...");
-    }
-
     private static void getSeatDetails(Event event) {
-        System.out.println("Getting seat details...");
+            Scanner scanner = new Scanner(System.in);
+    
+            System.out.print("Enter attendee name: ");
+            String name = scanner.nextLine();
+    
+            System.out.print("Enter seat number: ");
+            String seatNo = scanner.nextLine();
+    
+            try {
+                Attendee attendee = new Attendee(name, seatNo);
+                System.out.println("Attendee Details:");
+                System.out.println(attendee);
+            } catch (IllegalArgumentException e) {
+                System.out.println("Invalid input: " + e.getMessage());
+            }
+    
     }
 }
+
 
 
 
